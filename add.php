@@ -1,6 +1,4 @@
 <?php
-
-//Keeping the values
 $title = $email = $ingredients = "";
 
 $errors = ["email" => "", "title" => "", "ingredient" => "",];
@@ -33,6 +31,13 @@ if (isset($_POST["submit"])) {
         if (!preg_match('/^([a-zA-Z\s]+)(,\s*[a-zA-Z\s]*)*$/', $ingredients)) {
             $errors["ingredient"] = 'Ingredients must be a comma separated list';
         }
+    }
+
+    if (array_filter($errors)) {
+        # error
+    } else {
+        #v alid
+        header("Location: index.php");
     }
 } //end of post check
 
