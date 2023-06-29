@@ -467,6 +467,8 @@ composer.lock
 
 /wpcs/*
 
+/config/db_connect.php
+
 ##### SASS
 .sass-cache/
 *.css.map
