@@ -40,8 +40,24 @@ if (isset($_POST["submit"])) {
     if (array_filter($errors)) {
         # error
     } else {
-        #v alid
-        header("Location: index.php");
+        $email = mysqli_real_escape_string($conn, $_POST["email"]);
+        $title = mysqli_real_escape_string($conn, $_POST["title"]);
+        $ingredients = mysqli_real_escape_string($conn, $_POST["ingredients"]);
+
+        //create sql
+        $sql = "INSERT INTO pizzas(title, email, ingredients) VALUES('$title', '$email', '$ingredients')";
+
+        //save to DB and check
+        if (mysqli_query($conn, $sql)) {
+            //success
+            //redirect to the homepage
+            header("Location: index.php");
+        } else {
+            //error
+            echo "query error: " . mysqli_error($conn);
+        }
+
+
     }
 } //end of post check
 
