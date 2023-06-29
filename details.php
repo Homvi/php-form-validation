@@ -2,6 +2,20 @@
 
 include("config/db_connect.php");
 
+if(isset($_POST['delete'])){
+
+    $id_to_delete = mysqli_real_escape_string($conn, $_POST['id_to_delete']);
+
+    $sql = "DELETE FROM pizzas WHERE id = $id_to_delete";
+
+    if(mysqli_query($conn, $sql)){
+        header('Location: index.php');
+    } else {
+        echo 'query error: '. mysqli_error($conn);
+    }
+
+}
+
 if (isset($_GET["id"])) {
     //for security
     $id = mysqli_real_escape_string($conn, $_GET["id"]);
@@ -28,35 +42,24 @@ if (isset($_GET["id"])) {
 <?php
 include("templates/header.php")
     ?>
-<div class="container center">
-    <?php if ($pizza): ?>
-        <div class="card center">
-            <h3>
-                <?php echo htmlspecialchars($pizza["title"]) ?>
-            </h3>
-            <ul>
+<div class="container center grey-text">
+		<?php if($pizza): ?>
+			<h4><?php echo $pizza['title']; ?></h4>
+			<p>Created by <?php echo $pizza['email']; ?></p>
+			<p><?php echo date($pizza['created_at']); ?></p>
+			<h5>Ingredients:</h5>
+			<p><?php echo $pizza['ingredients']; ?></p>
 
-                <h6>Ingredients:</h6>
-                <?php foreach (explode(",", $pizza["ingredients"]) as $ing): ?>
-                    <li>
-                        <?php echo htmlspecialchars($ing) ?>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-            <p>
-                created at:
-                <?php echo htmlspecialchars($pizza["created_at"]) ?>
-            </p>
-            <p>
-                email:
-                <?php echo htmlspecialchars($pizza["email"]) ?>
-            </p>
-        </div>
-    <?php else: ?>
-        <p class="red-text">There is no pizza with this ID</p>
-    <?php endif ?>
+			<!-- DELETE FORM -->
+			<form action="details.php" method="POST">
+				<input type="hidden" name="id_to_delete" value="<?php echo $pizza['id']; ?>">
+				<input type="submit" name="delete" value="Delete" class="btn brand z-depth-0">
+			</form>
 
-</div>
+		<?php else: ?>
+			<h5>No such pizza exists.</h5>
+		<?php endif ?>
+	</div>
 
 
 <?php
